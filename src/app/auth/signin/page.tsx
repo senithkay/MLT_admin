@@ -1,9 +1,37 @@
+'use client';
 import Image from "next/image";
 import Divider from "@mui/material/Divider";
-import {Checkbox, FormControlLabel, TextField} from "@mui/material";
+import { TextField} from "@mui/material";
 import Button from "@mui/material/Button";
+import axiosInstance from "@/utils/axiosInstance";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks";
+import {useState} from "react";
+import store from "@/redux/store";
+import {authenticate} from "@/redux/auth";
+import {useRouter} from "next/navigation";
+import {RESPONSE_STATUS} from "@/utils/enums";
 
-const page = () => {
+interface ICredentials {
+    email: string
+    password: string
+}
+
+const Page = () => {
+    const [credentials, setCredentials] = useState<ICredentials>({
+        email : '',
+        password : ''
+    });
+    const router = useRouter();
+   const dispatch = useAppDispatch();
+
+    const handleLogin = () => {
+        axiosInstance.post('/auth/login', credentials).then((response)=>{
+            if (response.status === RESPONSE_STATUS.SUCCESS){
+                router.push('/app/help')
+            }
+        })
+
+    }
     return (
         <div className={'w-full h-[80vh] px-[100px] pb-[30px]'}>
             <div className={' w-full h-full flex items-center border-solid border-gray-300 border-2  rounded-3xl overflow-hidden relative'}>
@@ -17,14 +45,16 @@ const page = () => {
                     <h2 className={'font-bold text-[30px] mt-[10px]'}>Sign In</h2>
                     <p className={'mt-[50px]'}>Sign in to explore and create exam papers from your favourite templates. If you {`don't`} have an account please <a href="#">Sign up</a></p>
                     <form action="" className={'flex-1 p-[10px] flex flex-col justify-around '}>
-                        <TextField size={'small'} id="outlined-basic" label="Email" variant="outlined" />
-                        <TextField size={'small'} id="outlined-basic" label="Password" variant="outlined" />
+                        <TextField size={'small'} id="outlined-basic" label="Email" variant="outlined" onChange={(event)=>{
+                            setCredentials({...credentials, email : event.target.value});
+                        }}/>
+                        <TextField size={'small'} id="outlined-basic" label="Password" variant="outlined" onChange={(event)=>{
+                            setCredentials({...credentials, password : event.target.value});
+                        }}/>
                         <p>Having trouble in <a href="#">sign in</a>?</p>
-                        <Button className='bg-blue-600' variant='contained'>
-                            Sign up
+                        <Button className='bg-blue-600' variant='contained' onClick={handleLogin}>
+                            Sign in
                         </Button>
-                      
-
                     </form>
                 </div>
             </div>
@@ -32,4 +62,4 @@ const page = () => {
     );
 }
 
-export default page;
+export default Page;

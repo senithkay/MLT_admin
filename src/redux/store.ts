@@ -1,8 +1,15 @@
 import {configureStore} from "@reduxjs/toolkit";
-import rootReducer from "@/redux/reducers";
+import {authSlice} from "@/redux/auth";
+import {notificationSlice} from "@/redux/notification";
 
 const store = configureStore({
-    reducer: rootReducer
+    reducer: {
+        auth: authSlice.reducer,
+        notifications: notificationSlice.reducer,
+    }
 });
 
 export default store;
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+
