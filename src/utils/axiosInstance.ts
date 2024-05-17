@@ -3,11 +3,12 @@ import store from "@/redux/store";
 import {authenticate} from "@/redux/auth";
 import {showHide} from "@/redux/notification";
 import {NOTIFICATION_TYPES, RESPONSE_STATUS} from "@/utils/enums";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/'
+    baseURL: 'http://localhost:3000/',
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
 axiosInstance.interceptors.request.use(

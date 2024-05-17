@@ -4,12 +4,10 @@ import Divider from "@mui/material/Divider";
 import { TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import axiosInstance from "@/utils/axiosInstance";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {useState} from "react";
-import store from "@/redux/store";
-import {authenticate} from "@/redux/auth";
 import {useRouter} from "next/navigation";
 import {RESPONSE_STATUS} from "@/utils/enums";
+import axios from "axios";
 
 interface ICredentials {
     email: string
@@ -22,10 +20,10 @@ const Page = () => {
         password : ''
     });
     const router = useRouter();
-   const dispatch = useAppDispatch();
 
     const handleLogin = () => {
-        axiosInstance.post('/auth/login', credentials).then((response)=>{
+        axiosInstance.post('/auth/login', credentials)
+        .then((response)=>{
             if (response.status === RESPONSE_STATUS.SUCCESS){
                 router.push('/app/help')
             }
